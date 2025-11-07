@@ -1,0 +1,220 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Project {
+	title: string;
+	description: string;
+	technologies: string[];
+	link?: string;
+	github?: string;
+	image?: string;
+	category: string;
+}
+
+const projects: Project[] = [
+	{
+		title: "Guardian FIM",
+		description: "A complete File Integrity Monitoring (FIM) system designed as a host-based intrusion detection (HIDS) tool. Built with object-oriented Python, featuring SQLite database storage for file-system baselines, SHA256 hash verification for high-speed integrity checks, and comprehensive reporting in multiple formats (Console, JSON, HTML). Includes modular, configuration-driven design with file exclusions and comprehensive logging. Fully tested with unit and integration test suites for cross-platform compatibility.",
+		technologies: ["Python", "SQLite", "SHA256", "HIDS", "OOP"],
+		github: "#",
+		category: "Cybersecurity Tool"
+	},
+	{
+		title: "FinSync Automator",
+		description: "Python automation tool that fully automates the weekly financial reporting process by integrating data from Lightspeed POS and QuickBooks. The system handles data extraction, reconciliation, report generation, and automatic email delivery. This tool eliminated 96% of manual work, reducing processing time from 2 hours to less than 5 minutes of verification. Features robust error handling and edge case management.",
+		technologies: ["Python", "API Integration", "Automation", "QuickBooks", "Lightspeed POS"],
+		github: "#",
+		category: "Business Automation"
+	},
+	{
+		title: "ModAssist Bot",
+		description: "Python-based Discord bot hosted on Google Cloud Platform (GCP) that automates server management and moderation, improving staff efficiency by 70%. Features active monitoring system that parses messages for keyword triggers, automated moderation (deleting blacklisted content), and user engagement features (probabilistic 5% GIF responses). Integrates with Google Sheets API to pull, analyze, and visualize server metrics with automatically generated graphs.",
+		technologies: ["Python", "Discord API", "GCP", "Google Sheets API", "Data Visualization"],
+		github: "#",
+		category: "Automation & Analytics"
+	}
+];
+---
+
+<Layout title="Projects - Tyler Pauley">
+	<div class="projects-page">
+		<div class="container">
+			<header class="page-header">
+				<h1 class="page-title">Projects</h1>
+				<p class="page-description">
+					A showcase of my work, from web applications to creative experiments. 
+					Each project represents a unique challenge and learning opportunity.
+				</p>
+			</header>
+			<div class="projects-grid">
+				{projects.map((project) => (
+					<article class="project-card">
+						<div class="project-header">
+							<div>
+								<span class="project-category">{project.category}</span>
+								<h3 class="project-title">{project.title}</h3>
+							</div>
+							<div class="project-links">
+								{project.github && (
+									<a href={project.github} target="_blank" rel="noopener noreferrer" class="project-link" aria-label="GitHub">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+										</svg>
+									</a>
+								)}
+								{project.link && (
+									<a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Live Demo">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+											<polyline points="15 3 21 3 21 9"></polyline>
+											<line x1="10" y1="14" x2="21" y2="3"></line>
+										</svg>
+									</a>
+								)}
+							</div>
+						</div>
+						<p class="project-description">{project.description}</p>
+						<div class="project-tech">
+							{project.technologies.map((tech) => (
+								<span class="tech-tag">{tech}</span>
+							))}
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.projects-page {
+		padding: 4rem 2rem;
+		min-height: 80vh;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
+
+	.page-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 700;
+		margin-bottom: 1rem;
+		background: var(--gradient-primary);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.page-description {
+		font-size: 1.125rem;
+		color: var(--color-text-muted);
+		max-width: 700px;
+		margin: 0 auto;
+		line-height: 1.8;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 2rem;
+	}
+
+	.project-card {
+		background: var(--color-surface-elevated);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: 2rem;
+		transition: all 0.3s;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.project-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--color-accent);
+		box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+	}
+
+	.project-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: start;
+		gap: 1rem;
+	}
+
+	.project-category {
+		display: inline-block;
+		font-size: 0.75rem;
+		color: var(--color-accent);
+		font-weight: 500;
+		margin-bottom: 0.5rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.project-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--color-text);
+		margin: 0;
+	}
+
+	.project-links {
+		display: flex;
+		gap: 0.75rem;
+		flex-shrink: 0;
+	}
+
+	.project-link {
+		color: var(--color-text-muted);
+		transition: color 0.2s;
+		display: flex;
+		align-items: center;
+	}
+
+	.project-link:hover {
+		color: var(--color-accent);
+	}
+
+	.project-description {
+		color: var(--color-text-muted);
+		line-height: 1.7;
+		flex: 1;
+	}
+
+	.project-tech {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: auto;
+	}
+
+	.tech-tag {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		padding: 0.375rem 0.875rem;
+		border-radius: 6px;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
+		font-family: 'JetBrains Mono', monospace;
+	}
+
+	@media (max-width: 768px) {
+		.projects-page {
+			padding: 3rem 1.5rem;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+

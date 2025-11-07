@@ -1,0 +1,395 @@
+---
+---
+
+<section class="hero">
+	<div class="hero-container">
+		<div class="hero-content">
+			<h1 class="hero-title">
+				<span class="gradient-text">Developer</span>, 
+				<span class="gradient-text">Thinker</span>, 
+				<span class="gradient-text">Builder</span>
+			</h1>
+			<p class="hero-description">
+				Cybersecurity Professional & Data Analyst. I build automation tools, secure systems, and transform 
+				data into actionable insights. Welcome to my portfolio, where I share projects, technical insights, 
+				and learnings from the intersection of security, data, and development.
+			</p>
+			<div class="hero-cta">
+				<a href="/projects" class="btn btn-primary">View Projects</a>
+				<a href="/blog" class="btn btn-secondary">Read Blog</a>
+			</div>
+		</div>
+		<div class="hero-visual">
+			<div class="terminal-backdrop" id="terminal-backdrop"></div>
+			<div class="code-block" id="terminal-window">
+				<div class="code-header">
+					<button class="code-dot code-dot-close" aria-label="Close terminal" title="Close"></button>
+					<button class="code-dot code-dot-minimize" aria-label="Minimize terminal" title="Minimize"></button>
+					<button class="code-dot code-dot-maximize" aria-label="Maximize terminal" title="Maximize"></button>
+				</div>
+				<div class="code-content">
+					<pre><code>{`developer = {
+  name: 'Tyler Pauley',
+  role: 'Cybersecurity & Data Analysis',
+  skills: ['Python', 'Security', 'Automation'],
+  focus: ['FIM Systems', 'Data Pipelines', 'BI Reporting']
+}`}</code></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding: 6rem 2rem;
+		min-height: 80vh;
+		display: flex;
+		align-items: center;
+	}
+
+	.hero-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: center;
+	}
+
+	.hero-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 700;
+		line-height: 1.2;
+		margin-bottom: 1.5rem;
+		color: var(--color-text);
+	}
+
+	.gradient-text {
+		background: var(--gradient-primary);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero-description {
+		font-size: 1.125rem;
+		color: var(--color-text-muted);
+		margin-bottom: 2rem;
+		line-height: 1.8;
+		max-width: 600px;
+	}
+
+	.hero-cta {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		padding: 0.875rem 2rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.3s;
+		display: inline-block;
+		border: none;
+		cursor: pointer;
+		font-size: 1rem;
+	}
+
+	.btn-primary {
+		background: var(--gradient-primary);
+		color: white;
+		box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+	}
+
+	.btn-secondary {
+		background: var(--color-surface-elevated);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
+	}
+
+	.btn-secondary:hover {
+		background: var(--color-surface);
+		border-color: var(--color-accent);
+	}
+
+	.hero-visual {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.code-block {
+		background: var(--color-surface-elevated);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		overflow: hidden;
+		width: 100%;
+		max-width: 500px;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		transition: all 0.3s ease;
+	}
+
+	.code-block.closed {
+		opacity: 0.3;
+		transform: scale(0.95);
+	}
+
+	.code-block.closed .code-content {
+		display: none;
+	}
+
+	.code-block.closed .code-header {
+		cursor: pointer;
+	}
+
+	.code-block.closed .code-dot {
+		pointer-events: auto;
+	}
+
+	.code-block.minimized .code-content {
+		display: none;
+	}
+
+	.code-block.maximized {
+		max-width: 90vw;
+		width: 90vw;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 1000;
+		max-height: 90vh;
+	}
+
+	.code-block.maximized .code-content {
+		max-height: calc(90vh - 60px);
+		overflow-y: auto;
+	}
+
+	.terminal-backdrop {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.7);
+		backdrop-filter: blur(4px);
+		z-index: 999;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.terminal-backdrop.active {
+		display: block;
+		opacity: 1;
+	}
+
+	.code-header {
+		background: var(--color-surface);
+		padding: 0.75rem 1rem;
+		display: flex;
+		gap: 0.5rem;
+		border-bottom: 1px solid var(--color-border);
+		cursor: default;
+	}
+
+	.code-dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border: none;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		padding: 0;
+		flex-shrink: 0;
+	}
+
+	.code-dot:hover {
+		transform: scale(1.2);
+		opacity: 0.8;
+	}
+
+	.code-dot:active {
+		transform: scale(0.9);
+	}
+
+	.code-dot-close {
+		background: #ef4444;
+	}
+
+	.code-dot-minimize {
+		background: #f59e0b;
+	}
+
+	.code-dot-maximize {
+		background: #10b981;
+	}
+
+	.code-content {
+		transition: all 0.3s ease;
+	}
+
+	.code-block pre {
+		padding: 1.5rem;
+		margin: 0;
+		overflow-x: auto;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.875rem;
+		line-height: 1.8;
+	}
+
+	.code-block code {
+		color: var(--color-text);
+	}
+
+	@media (max-width: 968px) {
+		.hero-container {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+		}
+
+		.hero {
+			padding: 4rem 2rem;
+		}
+
+		.hero-visual {
+			order: -1;
+		}
+
+		.code-block.maximized {
+			max-width: 95vw;
+			width: 95vw;
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const terminal = document.getElementById('terminal-window');
+		const backdrop = document.getElementById('terminal-backdrop');
+		const closeBtn = terminal?.querySelector('.code-dot-close');
+		const minimizeBtn = terminal?.querySelector('.code-dot-minimize');
+		const maximizeBtn = terminal?.querySelector('.code-dot-maximize');
+
+		if (!terminal || !closeBtn || !minimizeBtn || !maximizeBtn) return;
+
+		let isMinimized = false;
+		let isMaximized = false;
+		let isClosed = false;
+
+		const updateBackdrop = () => {
+			if (backdrop) {
+				if (isMaximized) {
+					backdrop.classList.add('active');
+				} else {
+					backdrop.classList.remove('active');
+				}
+			}
+		};
+
+		// Close button
+		closeBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			if (isClosed) {
+				// Restore if already closed
+				terminal.classList.remove('closed');
+				isClosed = false;
+			} else {
+				// Close
+				terminal.classList.add('closed');
+				terminal.classList.remove('minimized', 'maximized');
+				isClosed = true;
+				isMinimized = false;
+				isMaximized = false;
+				updateBackdrop();
+			}
+		});
+
+		const restoreFromClosed = () => {
+			if (isClosed) {
+				terminal.classList.remove('closed');
+				isClosed = false;
+				return true;
+			}
+			return false;
+		};
+
+		// Minimize button
+		minimizeBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			
+			// If closed, restore first
+			if (restoreFromClosed()) {
+				updateBackdrop();
+				return;
+			}
+			
+			if (isMinimized) {
+				// Restore
+				terminal.classList.remove('minimized');
+				isMinimized = false;
+			} else {
+				// Minimize
+				terminal.classList.add('minimized');
+				terminal.classList.remove('maximized');
+				isMinimized = true;
+				isMaximized = false;
+				updateBackdrop();
+			}
+		});
+
+		// Maximize button
+		maximizeBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			
+			// If closed, restore first
+			if (restoreFromClosed()) {
+				updateBackdrop();
+				return;
+			}
+			
+			if (isMaximized) {
+				// Restore
+				terminal.classList.remove('maximized');
+				isMaximized = false;
+			} else {
+				// Maximize
+				terminal.classList.add('maximized');
+				terminal.classList.remove('minimized');
+				isMaximized = true;
+				isMinimized = false;
+			}
+			updateBackdrop();
+		});
+
+		// Close on escape key when maximized
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && isMaximized) {
+				terminal.classList.remove('maximized');
+				isMaximized = false;
+				updateBackdrop();
+			}
+		});
+
+		// Close on backdrop click
+		if (backdrop) {
+			backdrop.addEventListener('click', () => {
+				if (isMaximized) {
+					terminal.classList.remove('maximized');
+					isMaximized = false;
+					updateBackdrop();
+				}
+			});
+		}
+	});
+</script>
+

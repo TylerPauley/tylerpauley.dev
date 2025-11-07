@@ -1,0 +1,259 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title = "Tyler Pauley - Developer Portfolio & Tech Journal", description = "Portfolio, dev blog, and digital garden of Tyler Pauley" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav-container">
+				<a href="/" class="nav-logo">Tyler Pauley</a>
+				<ul class="nav-links">
+					<li><a href="/">Home</a></li>
+					<li><a href="/projects">Projects</a></li>
+					<li><a href="/blog">Blog</a></li>
+				</ul>
+				<button class="nav-toggle" aria-label="Toggle menu">
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+			</div>
+		</nav>
+		<main>
+			<slot />
+		</main>
+		<footer class="footer">
+			<div class="footer-container">
+				<p>&copy; {new Date().getFullYear()} Tyler Pauley. Built with Astro.</p>
+				<div class="footer-links">
+					<a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+					<a href="https://linkedin.com/in/tylerpauleysecurity" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+					<a href="mailto:tylerepauley@gmail.com">Contact</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--color-bg: #0a0a0f;
+		--color-surface: #14141f;
+		--color-surface-elevated: #1e1e2e;
+		--color-text: #e4e4e7;
+		--color-text-muted: #a1a1aa;
+		--color-accent: #6366f1;
+		--color-accent-hover: #818cf8;
+		--color-border: #27272a;
+		--gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+		--gradient-secondary: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+		background: var(--color-bg);
+		color: var(--color-text);
+		line-height: 1.6;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	main {
+		flex: 1;
+	}
+
+	/* Navigation */
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background: rgba(10, 10, 15, 0.8);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.nav-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1rem 2rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.nav-logo {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--color-text);
+		text-decoration: none;
+		background: var(--gradient-primary);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.nav-links {
+		display: flex;
+		list-style: none;
+		gap: 2rem;
+	}
+
+	.nav-links a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-weight: 500;
+		transition: color 0.2s;
+		position: relative;
+	}
+
+	.nav-links a:hover {
+		color: var(--color-text);
+	}
+
+	.nav-links a::after {
+		content: '';
+		position: absolute;
+		bottom: -4px;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background: var(--gradient-primary);
+		transition: width 0.3s;
+	}
+
+	.nav-links a:hover::after {
+		width: 100%;
+	}
+
+	.nav-toggle {
+		display: none;
+		flex-direction: column;
+		gap: 4px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+
+	.nav-toggle span {
+		width: 24px;
+		height: 2px;
+		background: var(--color-text);
+		transition: all 0.3s;
+	}
+
+	/* Footer */
+	.footer {
+		border-top: 1px solid var(--color-border);
+		margin-top: 4rem;
+		padding: 2rem 0;
+	}
+
+	.footer-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.footer p {
+		color: var(--color-text-muted);
+		font-size: 0.875rem;
+	}
+
+	.footer-links {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.footer-links a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: 0.875rem;
+		transition: color 0.2s;
+	}
+
+	.footer-links a:hover {
+		color: var(--color-text);
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.nav-links {
+			position: fixed;
+			top: 60px;
+			left: 0;
+			right: 0;
+			background: var(--color-surface);
+			flex-direction: column;
+			padding: 2rem;
+			gap: 1rem;
+			border-bottom: 1px solid var(--color-border);
+			transform: translateY(-100%);
+			opacity: 0;
+			pointer-events: none;
+			transition: all 0.3s;
+		}
+
+		.nav-links.active {
+			transform: translateY(0);
+			opacity: 1;
+			pointer-events: all;
+		}
+
+		.nav-toggle {
+			display: flex;
+		}
+
+		.footer-container {
+			flex-direction: column;
+			text-align: center;
+		}
+	}
+</style>
+
+<script>
+	// Mobile menu toggle
+	document.addEventListener('DOMContentLoaded', () => {
+		const toggle = document.querySelector('.nav-toggle');
+		const links = document.querySelector('.nav-links');
+		
+		if (toggle && links) {
+			toggle.addEventListener('click', () => {
+				links.classList.toggle('active');
+			});
+		}
+	});
+</script>
