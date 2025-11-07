@@ -13,24 +13,31 @@ interface Project {
 
 const projects: Project[] = [
 	{
+		title: "Python Security Toolkit",
+		description: "A versatile collection of Python scripts designed for security analysis, reconnaissance, and educational purposes. This toolkit brings together useful scripts for cybersecurity enthusiasts, students, and professionals. Features include domain analysis (DNS, WHOIS, and MX lookups), threat intelligence via VirusTotal API integration, file integrity checksums (MD5, SHA1, SHA256), password strength analysis, and an interactive gamified quiz for memorizing network ports. Built with clean, readable code that serves both practical tasks and as a learning resource. Open-source project with MIT license, designed to be simple, effective, and easily extensible.",
+		technologies: ["Python", "Security", "DNS", "WHOIS", "VirusTotal API", "Hashlib", "Threat Intelligence"],
+		github: "https://github.com/TylerPauley/Python-Security-Toolkit",
+		category: "Cybersecurity Tool"
+	},
+	{
 		title: "Guardian FIM",
-		description: "A complete File Integrity Monitoring (FIM) system designed as a host-based intrusion detection (HIDS) tool. Built with object-oriented Python, featuring SQLite database storage for file-system baselines, SHA256 hash verification for high-speed integrity checks, and comprehensive reporting in multiple formats (Console, JSON, HTML). Includes modular, configuration-driven design with file exclusions and comprehensive logging. Fully tested with unit and integration test suites for cross-platform compatibility.",
-		technologies: ["Python", "SQLite", "SHA256", "HIDS", "OOP"],
-		github: "#",
+		description: "A comprehensive host-based intrusion detection system (HIDS) for monitoring file system changes and ensuring system integrity. Built with object-oriented Python architecture featuring modular design with separated concerns (Guardian, GuardianConfig, GuardianDatabase, GuardianScanner, GuardianReporter classes). Uses SQLite database for storing file-system baselines and change history. Implements SHA256, SHA1, and MD5 cryptographic hashing for file integrity verification. Generates comprehensive reports in multiple formats (Console, JSON, HTML) with detailed change tracking. Includes configuration-driven design with INI file support, file exclusion patterns, comprehensive logging system, and full test coverage (400+ lines of tests). Designed for system administration, web server security, compliance auditing, and development environment monitoring. Cross-platform compatible with proper Windows encoding handling.",
+		technologies: ["Python", "SQLite", "SHA256", "SHA1", "MD5", "HIDS", "OOP", "Security", "FIM"],
+		github: "https://github.com/TylerPauley/Guardian",
 		category: "Cybersecurity Tool"
 	},
 	{
 		title: "FinSync Automator",
-		description: "Python automation tool that fully automates the weekly financial reporting process by integrating data from Lightspeed POS and QuickBooks. The system handles data extraction, reconciliation, report generation, and automatic email delivery. This tool eliminated 96% of manual work, reducing processing time from 2 hours to less than 5 minutes of verification. Features robust error handling and edge case management.",
-		technologies: ["Python", "API Integration", "Automation", "QuickBooks", "Lightspeed POS"],
-		github: "#",
+		description: "Python automation tool that fully automates the weekly financial reporting process by integrating data from Lightspeed POS and QuickBooks APIs. The system extracts financial data from both platforms using their respective APIs, performs data reconciliation and manipulation, and generates formatted Excel reports using Python libraries. Handles data extraction, transformation, reconciliation logic, report generation, and automatic email delivery. This tool eliminated 96% of manual work, reducing processing time from 2 hours to less than 5 minutes of verification. Features robust error handling, edge case management, and comprehensive data validation. Demonstrates expertise in API integration, data manipulation, and automated reporting workflows. (Private repository - contains proprietary business logic and company-specific configurations)",
+		technologies: ["Python", "API Integration", "Automation", "QuickBooks API", "Lightspeed POS API", "Excel", "Data Manipulation"],
+		github: null,
 		category: "Business Automation"
 	},
 	{
 		title: "ModAssist Bot",
-		description: "Python-based Discord bot hosted on Google Cloud Platform (GCP) that automates server management and moderation, improving staff efficiency by 70%. Features active monitoring system that parses messages for keyword triggers, automated moderation (deleting blacklisted content), and user engagement features (probabilistic 5% GIF responses). Integrates with Google Sheets API to pull, analyze, and visualize server metrics with automatically generated graphs.",
+		description: "Python-based Discord bot hosted on Google Cloud Platform (GCP) that automates server management and moderation, improving staff efficiency by 70%. Features active monitoring system that parses messages for keyword triggers, automated moderation (deleting blacklisted content), and user engagement features (probabilistic 5% GIF responses). Integrates with Google Sheets API to pull, analyze, and visualize server metrics with automatically generated graphs. Built for a community I'm part of to help streamline moderation workflows. (Community-owned project)",
 		technologies: ["Python", "Discord API", "GCP", "Google Sheets API", "Data Visualization"],
-		github: "#",
+		github: null,
 		category: "Automation & Analytics"
 	}
 ];
@@ -106,10 +113,14 @@ const projects: Project[] = [
 		font-size: clamp(2.5rem, 5vw, 4rem);
 		font-weight: 700;
 		margin-bottom: 1rem;
-		background: var(--gradient-primary);
+		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+		background-size: 200% 200%;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
+		animation: gradient-shift 5s ease infinite;
+		position: relative;
+		display: inline-block;
 	}
 
 	.page-description {
@@ -129,18 +140,44 @@ const projects: Project[] = [
 	.project-card {
 		background: var(--color-surface-elevated);
 		border: 1px solid var(--color-border);
-		border-radius: 12px;
+		border-radius: 16px;
 		padding: 2rem;
-		transition: all 0.3s;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		position: relative;
+		overflow: hidden;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+	}
+
+	.project-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+		background-size: 200% 100%;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s ease;
+		opacity: 0.8;
 	}
 
 	.project-card:hover {
-		transform: translateY(-4px);
-		border-color: var(--color-accent);
-		box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+		transform: translateY(-8px) scale(1.02);
+		border-color: rgba(99, 102, 241, 0.5);
+		box-shadow: 
+			0 20px 60px rgba(99, 102, 241, 0.3),
+			0 0 0 1px rgba(99, 102, 241, 0.2),
+			inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	}
+
+	.project-card:hover::before {
+		transform: scaleX(1);
+		animation: gradient-shift 2s ease infinite;
 	}
 
 	.project-header {

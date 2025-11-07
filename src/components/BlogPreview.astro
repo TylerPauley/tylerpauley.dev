@@ -9,25 +9,11 @@ interface BlogPost {
 
 const posts: BlogPost[] = [
 	{
-		title: "Building a File Integrity Monitoring System",
-		excerpt: "How I designed and engineered Guardian FIM, a complete HIDS tool using Python. Exploring the architecture, security considerations, and implementation challenges.",
-		date: "2024-08-20",
-		slug: "file-integrity-monitoring-security",
-		tags: ["Cybersecurity", "Python", "HIDS"]
-	},
-	{
-		title: "Automating Financial Reporting with Python",
-		excerpt: "The story behind FinSync Automator: how I reduced weekly financial reporting from 2 hours to 5 minutes by automating data integration between Lightspeed POS and QuickBooks.",
-		date: "2024-09-15",
-		slug: "python-automation-financial-reporting",
-		tags: ["Python", "Automation", "Data Analysis"]
-	},
-	{
-		title: "Managing Multi-Platform Data Pipelines",
-		excerpt: "Lessons learned from managing complex data pipelines across HubSpot, SamCart, Shopify, and Post Affiliate Pro. Ensuring data integrity for multi-million dollar commission programs.",
-		date: "2024-07-10",
-		slug: "data-pipeline-integration",
-		tags: ["Data Integration", "E-Commerce", "Automation"]
+		title: "Building Tools to Understand the Why's and How's",
+		excerpt: "Exploring how creating your own tools helps deepen understanding of underlying concepts. From building security toolkits to gamified learning experiences, discover how hands-on development teaches you more than just following tutorials.",
+		date: "2025-08-12",
+		slug: "building-tools-understand-whys-hows",
+		tags: ["Learning", "Development", "Education", "Tools"]
 	}
 ];
 ---
@@ -40,7 +26,7 @@ const posts: BlogPost[] = [
 		</div>
 		<div class="posts-grid">
 			{posts.map((post) => (
-				<article class="post-card">
+				<article class="post-card fade-in-up">
 					<div class="post-meta">
 						<time datetime={post.date} class="post-date">
 							{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -73,6 +59,18 @@ const posts: BlogPost[] = [
 <style>
 	.blog-preview {
 		padding: 6rem 2rem;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.blog-preview::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
 	}
 
 	.container {
@@ -89,10 +87,14 @@ const posts: BlogPost[] = [
 		font-size: clamp(2rem, 4vw, 3rem);
 		font-weight: 700;
 		margin-bottom: 1rem;
-		background: var(--gradient-primary);
+		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+		background-size: 200% 200%;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
+		animation: gradient-shift 5s ease infinite;
+		position: relative;
+		display: inline-block;
 	}
 
 	.section-description {
@@ -110,18 +112,44 @@ const posts: BlogPost[] = [
 	.post-card {
 		background: var(--color-surface-elevated);
 		border: 1px solid var(--color-border);
-		border-radius: 12px;
+		border-radius: 16px;
 		padding: 2rem;
-		transition: all 0.3s;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		position: relative;
+		overflow: hidden;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+	}
+
+	.post-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+		background-size: 200% 100%;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s ease;
+		opacity: 0.8;
 	}
 
 	.post-card:hover {
-		transform: translateY(-4px);
-		border-color: var(--color-accent);
-		box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+		transform: translateY(-8px) scale(1.02);
+		border-color: rgba(99, 102, 241, 0.5);
+		box-shadow: 
+			0 20px 60px rgba(99, 102, 241, 0.3),
+			0 0 0 1px rgba(99, 102, 241, 0.2),
+			inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	}
+
+	.post-card:hover::before {
+		transform: scaleX(1);
+		animation: gradient-shift 2s ease infinite;
 	}
 
 	.post-meta {
