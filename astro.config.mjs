@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	output: 'static',
 	// If using a project repository (e.g., tylerpauley/tylerpauley.dev):
-	site: 'https://tylerpauley.github.io',
+	site: 'https://www.tylerpauley.dev/',
 	base: '/tylerpauley.dev',
 	
 	// If using the main GitHub Pages site (tylerpauley/tylerpauley.github.io):
