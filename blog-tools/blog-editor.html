@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post Editor - Tyler Pauley</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0f;
+            --color-surface: #14141f;
+            --color-surface-elevated: #1e1e2e;
+            --color-text: #e4e4e7;
+            --color-text-muted: #a1a1aa;
+            --color-accent: #6366f1;
+            --color-accent-hover: #818cf8;
+            --color-border: #27272a;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+            color: var(--color-text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--color-text-muted);
+        }
+
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: calc(100vh - 200px);
+        }
+
+        .editor-panel, .preview-panel {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+            overflow-y: auto;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .panel-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group textarea.content-editor {
+            min-height: 300px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--color-accent);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .tag-remove:hover {
+            opacity: 1;
+        }
+
+        .tags-input input {
+            flex: 1;
+            min-width: 120px;
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+
+        .helper-text {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+        }
+
+        /* Preview Styles */
+        .preview-content {
+            color: var(--color-text);
+        }
+
+        .preview-header {
+            margin-bottom: 3rem;
+        }
+
+        .preview-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-date {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .preview-read-time {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .preview-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .preview-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-tag {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            padding: 0.375rem 0.875rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .preview-content {
+            color: var(--color-text);
+            line-height: 1.8;
+            font-size: 1.125rem;
+        }
+
+        .preview-content h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .preview-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .preview-content p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text-muted);
+        }
+
+        .preview-content code {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--color-accent);
+        }
+
+        .preview-content pre {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        .preview-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--color-text);
+        }
+
+        .preview-content a {
+            color: var(--color-accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .preview-content a:hover {
+            border-bottom-color: var(--color-accent);
+        }
+
+        .preview-content ul,
+        .preview-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .preview-content li {
+            margin-bottom: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .preview-content em {
+            font-style: italic;
+        }
+
+        .preview-content strong {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .export-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .export-modal.active {
+            display: flex;
+        }
+
+        .export-content {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .export-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .export-section {
+            margin-bottom: 2rem;
+        }
+
+        .export-section h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .code-block {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: var(--color-text);
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .instructions {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions code {
+            background: var(--color-surface-elevated);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @media (max-width: 1024px) {
+            .editor-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .editor-panel, .preview-panel {
+                min-height: 400px;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--color-text-muted);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blog Post Editor</h1>
+            <p>Create and preview blog posts with real-time updates</p>
+        </div>
+
+        <div class="editor-layout">
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <h2>Editor</h2>
+                </div>
+
+                <form id="blogForm">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" name="title" required placeholder="Enter blog post title">
+                        <div class="helper-text">The slug will be auto-generated from the title</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date *</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <div class="tags-input" id="tagsContainer">
+                            <input type="text" id="tagInput" placeholder="Type and press Enter to add tag">
+                        </div>
+                        <div class="helper-text">Press Enter to add a tag</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="readTime">Read Time</label>
+                        <input type="text" id="readTime" name="readTime" placeholder="e.g., 8 min read">
+                        <div class="helper-text">Leave empty to auto-calculate from content</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="excerpt">Excerpt *</label>
+                        <textarea id="excerpt" name="excerpt" required placeholder="A brief summary of the blog post"></textarea>
+                        <div class="helper-text">This appears on the blog listing page</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Content *</label>
+                        <textarea id="content" name="content" class="content-editor" required placeholder="Write your blog post content in HTML. Example:&#10;&lt;p&gt;Your paragraph here&lt;/p&gt;&#10;&lt;h2&gt;Heading&lt;/h2&gt;&#10;&lt;p&gt;More content...&lt;/p&gt;"></textarea>
+                        <div class="helper-text">Use HTML tags for formatting (p, h2, h3, ul, ol, li, code, pre, a, em, strong)</div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="btn btn-primary" id="exportBtn">Export Code</button>
+                        <button type="button" class="btn btn-primary" id="saveJsonBtn">Save as JSON</button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2>Preview</h2>
+                </div>
+                <div id="preview">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <p>Start typing to see the preview</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="export-modal" id="exportModal">
+        <div class="export-content">
+            <div class="export-header">
+                <h2>Export Code</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="export-section">
+                <h3>1. Add to blog.astro (posts array)</h3>
+                <div class="code-block" style="position: relative;">
+                    <button class="copy-btn" onclick="copyCode('blogArrayCode')">Copy</button>
+                    <pre id="blogArrayCode"></pre>
+                </div>
+            </div>
+
+            <div class="export-section">
+                <h3>2. Add slug to [slug].astro (getStaticPaths)</h3>
+                <div class="code-block" style="position: relative;">
+                    <button class="copy-btn" onclick="copyCode('slugCode')">Copy</button>
+                    <pre id="slugCode"></pre>
+                </div>
+            </div>
+
+            <div class="export-section">
+                <h3>3. Add post data to [slug].astro (posts object)</h3>
+                <div class="code-block" style="position: relative;">
+                    <button class="copy-btn" onclick="copyCode('postDataCode')">Copy</button>
+                    <pre id="postDataCode"></pre>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <strong>Quick Method (Recommended):</strong>
+                <p style="margin: 0.5rem 0;">Click "Save as JSON" in the editor, then run: <code>node blog-tools/add-blog-post.js blog-post-[slug].json</code></p>
+                <p style="margin: 0.5rem 0 1rem 0; color: var(--color-text-muted);">This will automatically update all files for you!</p>
+                <strong>Manual Method:</strong>
+                <ol>
+                    <li>Copy the first code block and add it to the <code>posts</code> array in <code>src/pages/blog.astro</code></li>
+                    <li>Copy the second code block and add the slug string to the <code>posts</code> array in <code>getStaticPaths()</code> in <code>src/pages/blog/[slug].astro</code></li>
+                    <li>Copy the third code block and add it to the <code>posts</code> object in <code>src/pages/blog/[slug].astro</code></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tags = [];
+
+        // Initialize date to today
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Tag input handling
+        const tagInput = document.getElementById('tagInput');
+        const tagsContainer = document.getElementById('tagsContainer');
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tag = tagInput.value.trim();
+                if (tag && !tags.includes(tag)) {
+                    tags.push(tag);
+                    updateTagsDisplay();
+                    tagInput.value = '';
+                }
+            }
+        });
+
+        function updateTagsDisplay() {
+            const existingTags = tagsContainer.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+            
+            tags.forEach(tag => {
+                const tagEl = document.createElement('span');
+                tagEl.className = 'tag';
+                tagEl.innerHTML = `
+                    ${tag}
+                    <span class="tag-remove" data-tag="${tag}">&times;</span>
+                `;
+                tagsContainer.insertBefore(tagEl, tagInput);
+            });
+
+            tagsContainer.querySelectorAll('.tag-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tagToRemove = e.target.getAttribute('data-tag');
+                    tags = tags.filter(t => t !== tagToRemove);
+                    updateTagsDisplay();
+                });
+            });
+        }
+
+        // Generate slug from title
+        function generateSlug(title) {
+            return title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        // Calculate read time
+        function calculateReadTime(content) {
+            // Remove HTML tags and count words
+            const text = content.replace(/<[^>]*>/g, ' ').trim();
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const wordsPerMinute = 200;
+            const minutes = Math.ceil(words.length / wordsPerMinute);
+            return `${minutes} min read`;
+        }
+
+        // Update preview
+        function updatePreview() {
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const readTime = document.getElementById('readTime').value || calculateReadTime(document.getElementById('content').value);
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+
+            if (!title && !content) {
+                document.getElementById('preview').innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <p>Start typing to see the preview</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const formattedDate = date ? new Date(date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            }) : '';
+
+            const tagsHtml = tags.map(tag => 
+                `<span class="preview-tag">${escapeHtml(tag)}</span>`
+            ).join('');
+
+            document.getElementById('preview').innerHTML = `
+                <div class="preview-header">
+                    <div class="preview-meta">
+                        ${date ? `<time class="preview-date">${formattedDate}</time>` : ''}
+                        ${readTime ? `<span class="preview-read-time">${escapeHtml(readTime)}</span>` : ''}
+                    </div>
+                    ${title ? `<h1 class="preview-title">${escapeHtml(title)}</h1>` : ''}
+                    ${tags.length > 0 ? `<div class="preview-tags">${tagsHtml}</div>` : ''}
+                </div>
+                <div class="preview-content">
+                    ${content || '<p style="color: var(--color-text-muted); font-style: italic;">No content yet...</p>'}
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-update preview on input
+        ['title', 'date', 'readTime', 'excerpt', 'content'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        // Export code
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const readTime = document.getElementById('readTime').value || calculateReadTime(document.getElementById('content').value);
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+            const slug = generateSlug(title);
+
+            if (!title || !date || !excerpt || !content) {
+                alert('Please fill in all required fields (Title, Date, Excerpt, Content)');
+                return;
+            }
+
+            // Escape quotes in strings
+            const escapeString = (str) => str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+
+            // Format content with proper indentation
+            const formattedContent = content
+                .split('\n')
+                .map(line => `\t\t\t${line}`)
+                .join('\n')
+                .trim();
+
+            // Blog array entry
+            const tagsArray = tags.map(t => `"${escapeString(t)}"`).join(', ');
+            const blogArrayCode = `\t{\n\t\ttitle: "${escapeString(title)}",\n\t\texcerpt: "${escapeString(excerpt)}",\n\t\tdate: "${date}",\n\t\tslug: "${slug}",\n\t\ttags: [${tagsArray}],\n\t\treadTime: "${escapeString(readTime)}"\n\t}`;
+
+            // Slug entry
+            const slugCode = `\t\t'${slug}'`;
+
+            // Post data entry
+            const postDataCode = `\t'${slug}': {\n\t\ttitle: '${escapeString(title)}',\n\t\tdate: '${date}',\n\t\treadTime: '${escapeString(readTime)}',\n\t\ttags: [${tags.map(t => `'${escapeString(t)}'`).join(', ')}],\n\t\tcontent: \`\n${formattedContent}\n\t\t\`\n\t}`;
+
+            document.getElementById('blogArrayCode').textContent = blogArrayCode;
+            document.getElementById('slugCode').textContent = slugCode;
+            document.getElementById('postDataCode').textContent = postDataCode;
+
+            document.getElementById('exportModal').classList.add('active');
+        });
+
+        // Save as JSON
+        document.getElementById('saveJsonBtn').addEventListener('click', async () => {
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const readTime = document.getElementById('readTime').value || calculateReadTime(document.getElementById('content').value);
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+            const slug = generateSlug(title);
+
+            if (!title || !date || !excerpt || !content) {
+                alert('Please fill in all required fields (Title, Date, Excerpt, Content)');
+                return;
+            }
+
+            const postData = {
+                title,
+                date,
+                slug,
+                excerpt,
+                content,
+                tags,
+                readTime
+            };
+
+            const json = JSON.stringify(postData, null, 2);
+            const filename = `blog-post-${slug}.json`;
+
+            // Try to use File System Access API to save to the same directory as the HTML
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const fileHandle = await window.showSaveFilePicker({
+                        suggestedName: filename,
+                        types: [{
+                            description: 'JSON files',
+                            accept: { 'application/json': ['.json'] }
+                        }],
+                        startIn: 'documents' // Browser will remember the last used directory
+                    });
+                    
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(json);
+                    await writable.close();
+                    
+                    alert(`JSON file saved! Now run: node blog-tools/add-blog-post.js ${filename}`);
+                    return;
+                } catch (err) {
+                    // User cancelled or error occurred, fall back to download
+                    if (err.name !== 'AbortError') {
+                        console.warn('File System Access API failed, using download:', err);
+                    } else {
+                        // User cancelled
+                        return;
+                    }
+                }
+            }
+
+            // Fallback to regular download
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert(`JSON file saved! Now run: node blog-tools/add-blog-post.js ${filename}`);
+        });
+
+        // Close modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('exportModal').classList.remove('active');
+        });
+
+        document.getElementById('exportModal').addEventListener('click', (e) => {
+            if (e.target.id === 'exportModal') {
+                document.getElementById('exportModal').classList.remove('active');
+            }
+        });
+
+        // Copy code function
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Clear form
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                document.getElementById('blogForm').reset();
+                tags = [];
+                updateTagsDisplay();
+                document.getElementById('date').valueAsDate = new Date();
+                updatePreview();
+            }
+        });
+
+        // Initial preview update
+        updatePreview();
+    </script>
+</body>
+</html>
+

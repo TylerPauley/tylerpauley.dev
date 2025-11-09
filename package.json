@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "add-post": "node blog-tools/add-blog-post.js",
+    "remove-post": "node blog-tools/remove-blog-post.js",
+    "push": "node blog-tools/push-to-github.js"
   },
   "dependencies": {
     "astro": "^5.15.4"

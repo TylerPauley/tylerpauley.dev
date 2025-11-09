@@ -1,25 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-interface BlogPost {
-	title: string;
-	excerpt: string;
-	date: string;
-	slug: string;
-	tags: string[];
-	readTime: string;
-}
-
-const posts: BlogPost[] = [
-	{
-		title: "Building Tools to Understand the Why's and How's",
-		excerpt: "Exploring how creating your own tools helps deepen understanding of underlying concepts. From building security toolkits to gamified learning experiences, discover how hands-on development teaches you more than just following tutorials.",
-		date: "2025-08-12",
-		slug: "building-tools-understand-whys-hows",
-		tags: ["Learning", "Development", "Education", "Tools"],
-		readTime: "8 min read"
-	}
-];
+import { posts } from '../data/blog-posts';
 ---
 
 <Layout title="Blog - Tyler Pauley">

@@ -1,21 +1,10 @@
 ---
-interface BlogPost {
-	title: string;
-	excerpt: string;
-	date: string;
-	slug: string;
-	tags: string[];
-}
+import { posts } from '../data/blog-posts';
 
-const posts: BlogPost[] = [
-	{
-		title: "Building Tools to Understand the Why's and How's",
-		excerpt: "Exploring how creating your own tools helps deepen understanding of underlying concepts. From building security toolkits to gamified learning experiences, discover how hands-on development teaches you more than just following tutorials.",
-		date: "2025-08-12",
-		slug: "building-tools-understand-whys-hows",
-		tags: ["Learning", "Development", "Education", "Tools"]
-	}
-];
+// Get the latest 3 posts (sorted by date, newest first)
+const latestPosts = [...posts]
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+	.slice(0, 3);
 ---
 
 <section class="blog-preview">
@@ -25,7 +14,7 @@ const posts: BlogPost[] = [
 			<p class="section-description">Technical insights, project deep-dives, and learnings from cybersecurity, data analysis, and automation</p>
 		</div>
 		<div class="posts-grid">
-			{posts.map((post) => (
+			{latestPosts.map((post) => (
 				<article class="post-card fade-in-up">
 					<div class="post-meta">
 						<time datetime={post.date} class="post-date">
