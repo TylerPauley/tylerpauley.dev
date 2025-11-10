@@ -123,6 +123,18 @@
             border-color: var(--color-accent);
         }
 
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .form-group label:has(input[type="checkbox"]) {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
@@ -531,6 +543,20 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" placeholder="Tyler Pauley" value="Tyler Pauley">
+                        <div class="helper-text">Default: Tyler Pauley</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="pinned" name="pinned">
+                            Pin this post
+                        </label>
+                        <div class="helper-text">Pinned posts appear first in blog listings</div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="excerpt">Excerpt *</label>
                         <textarea id="excerpt" name="excerpt" required placeholder="A brief summary of the blog post"></textarea>
                         <div class="helper-text">This appears on the blog listing page</div>
@@ -793,10 +819,15 @@
                 return;
             }
 
+            const author = document.getElementById('author').value || 'Tyler Pauley';
+            const pinned = document.getElementById('pinned').checked;
+
             const postData = {
                 title,
                 date,
                 slug,
+                author,
+                pinned,
                 excerpt,
                 content,
                 tags,

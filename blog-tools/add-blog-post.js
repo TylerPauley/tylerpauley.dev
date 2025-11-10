@@ -189,7 +189,9 @@ function proceedWithAdding(resolvedJsonPath) {
     blogPostsTsContent = fs.readFileSync(blogPostsTsPath, 'utf-8');
 
     // 1. Add to blog-posts.ts (source of truth)
-    const blogPostTsEntry = `\t{\n\t\ttitle: "${postData.title.replace(/"/g, '\\"')}",\n\t\texcerpt: "${postData.excerpt.replace(/"/g, '\\"')}",\n\t\tdate: "${postData.date}",\n\t\tslug: "${postData.slug}",\n\t\ttags: [${postData.tags.map(t => `"${t.replace(/"/g, '\\"')}"`).join(', ')}],\n\t\treadTime: "${postData.readTime.replace(/"/g, '\\"')}"\n\t}`;
+    const pinned = postData.pinned ? 'true' : 'false';
+    const author = postData.author || 'Tyler Pauley';
+    const blogPostTsEntry = `\t{\n\t\ttitle: "${postData.title.replace(/"/g, '\\"')}",\n\t\texcerpt: "${postData.excerpt.replace(/"/g, '\\"')}",\n\t\tdate: "${postData.date}",\n\t\tslug: "${postData.slug}",\n\t\ttags: [${postData.tags.map(t => `"${t.replace(/"/g, '\\"')}"`).join(', ')}],\n\t\treadTime: "${postData.readTime.replace(/"/g, '\\"')}",\n\t\tpinned: ${pinned},\n\t\tauthor: "${author.replace(/"/g, '\\"')}"\n\t}`;
 
     const postsTsArrayRegex = /export const posts: BlogPost\[\] = \[([\s\S]*?)\];/;
     const postsTsArrayMatch = blogPostsTsContent.match(postsTsArrayRegex);

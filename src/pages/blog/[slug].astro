@@ -29,6 +29,7 @@ const posts: Record<string, {
 	content: string;
 	tags: string[];
 	readTime: string;
+	author?: string;
 }> = {
 'building-tools-understand-whys-hows': {
 		title: 'Building Tools to Understand the Why\'s and How\'s',
@@ -148,6 +149,10 @@ if (!post) {
 						<span class="post-tag">{tag}</span>
 					))}
 				</div>
+				<div class="post-author">
+					<span class="author-label">By</span>
+					<span class="author-name">{post.author || 'Tyler Pauley'}</span>
+				</div>
 			</header>
 			<div class="post-content" set:html={post.content} />
 		</div>
@@ -226,34 +231,54 @@ if (!post) {
 		color: var(--color-text-muted);
 	}
 
-	.post-content {
+	.post-author {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 1.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.author-label {
+		color: var(--color-text-muted);
+		font-size: 0.875rem;
+	}
+
+	.author-name {
+		color: var(--color-text);
+		font-weight: 600;
+		font-size: 0.875rem;
+	}
+
+	.post-content :global(*) {
 		color: var(--color-text);
 		line-height: 1.8;
 		font-size: 1.125rem;
 	}
 
-	.post-content h2 {
+	.post-content :global(h2) {
 		font-size: 2rem;
 		font-weight: 600;
 		margin-top: 3rem;
-		margin-bottom: 1rem;
+		margin-bottom: 1.5rem;
 		color: var(--color-text);
 	}
 
-	.post-content h3 {
+	.post-content :global(h3) {
 		font-size: 1.5rem;
 		font-weight: 600;
-		margin-top: 2rem;
-		margin-bottom: 1rem;
+		margin-top: 2.5rem;
+		margin-bottom: 1.5rem;
 		color: var(--color-text);
 	}
 
-	.post-content p {
-		margin-bottom: 1.5rem;
+	.post-content :global(p) {
+		margin-bottom: 1.75rem;
 		color: var(--color-text-muted);
 	}
 
-	.post-content code {
+	.post-content :global(code) {
 		background: var(--color-surface-elevated);
 		border: 1px solid var(--color-border);
 		padding: 0.125rem 0.5rem;
@@ -263,42 +288,53 @@ if (!post) {
 		color: var(--color-accent);
 	}
 
-	.post-content pre {
+	.post-content :global(pre) {
 		background: var(--color-surface-elevated);
 		border: 1px solid var(--color-border);
 		border-radius: 8px;
 		padding: 1.5rem;
 		overflow-x: auto;
-		margin: 2rem 0;
+		margin: 2.5rem 0;
 	}
 
-	.post-content pre code {
+	.post-content :global(pre code) {
 		background: none;
 		border: none;
 		padding: 0;
-		color: var(--color-text);
+		color: var(--color-accent);
+		font-size: 0.95em;
 	}
 
-	.post-content a {
+	.post-content :global(a) {
 		color: var(--color-accent);
 		text-decoration: none;
 		border-bottom: 1px solid transparent;
 		transition: border-color 0.2s;
 	}
 
-	.post-content a:hover {
+	.post-content :global(a:hover) {
 		border-bottom-color: var(--color-accent);
 	}
 
-	.post-content ul,
-	.post-content ol {
-		margin: 1.5rem 0;
+	.post-content :global(ul),
+	.post-content :global(ol) {
+		margin: 2rem 0;
 		padding-left: 2rem;
 	}
 
-	.post-content li {
-		margin-bottom: 0.75rem;
+	.post-content :global(li) {
+		margin-bottom: 1rem;
 		color: var(--color-text-muted);
+		line-height: 1.8;
+	}
+
+	.post-content :global(em) {
+		font-style: italic;
+	}
+
+	.post-content :global(strong) {
+		font-weight: 600;
+		color: var(--color-text);
 	}
 
 	@media (max-width: 768px) {
